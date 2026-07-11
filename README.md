@@ -60,35 +60,31 @@ sudo groupadd uinput
 sudo usermod -aG uinput $USER
 ```
 
-2. Crear una regla udev para que el grupo tenga acceso al dispositivo:
+2. Incluir nuestro usuario en el grupo input
+
+```bash
+sudo usermod -aG input $USER
+```
+
+3. Crear una regla udev para que el grupo tenga acceso al dispositivo:
 
 ```bash
 echo 'KERNEL=="uinput", GROUP="uinput", MODE="0660"' | sudo tee /etc/udev/rules.d/99-uinput.rules
 ```
 
-3. Recargar las reglas udev:
+4. Recargar las reglas udev:
 
 ```bash
 sudo udevadm control --reload-rules && sudo udevadm trigger
 ```
 
-4. Cerrar sesión y volver a iniciarla (o reiniciar), porque el cambio de grupo
+5. Cerrar sesión y volver a iniciarla (o reiniciar), porque el cambio de grupo
    no se aplica hasta que vuelvas a loguearte.
 
 Después de reiniciar sesión, deberás de poder ejecutar sin sudo:
 
 ```bash
 kanata -c ~/.config/kanata/config.kbd
-```
-
-
-### Incluir nuestro usuario en el grupo input
-
-Ademáß de estar en el gupo `uinput` debemos estar en `input` para que kanata
-detecte nuestro teclado cuando es lanzado como servicio de sistemd.
-
-```bash
-sudo usermod -aG input $USER
 ```
 
 
@@ -133,6 +129,7 @@ systemctl --user status kanata.service
 ```
 
 Con esto, el servicio de kanata se ejecutará cada que iniciemos sesión.
+
 
 ### Cosas útiles
 
